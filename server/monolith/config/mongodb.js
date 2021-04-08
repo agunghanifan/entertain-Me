@@ -1,8 +1,9 @@
 const { MongoClient } = require('mongodb')
 const uri = 'mongodb://localhost:27017'
+let database = null
 
 
-function connectMongoDB(cb) {
+function connectMongodb (cb) {
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -10,6 +11,7 @@ function connectMongoDB(cb) {
   
   client.connect()
     .then(() => {
+      database = client.db('entertainMeOne')
       cb(true)
     })
   
@@ -19,4 +21,12 @@ function connectMongoDB(cb) {
     })
 }
 
-module.exports = connectMongoDB
+function getDatabase () {
+  return database
+}
+
+module.exports = {
+  connectMongodb,
+  getDatabase
+}
+

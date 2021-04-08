@@ -1,15 +1,17 @@
 const express = require('express')
 const app = express()
+const routes = require('./routes')
 const port = 3000
-const connectMongoDB = require('./config/mongodb')
+const { connectMongodb } = require('./config/mongodb')
 
-connectMongoDB((connected) => {
+
+app.use(express.urlencoded({ extended: true}))
+app.use(express.json())
+app.use(routes)
+
+connectMongodb((connected) => {
     if (connected) console.log('Connected to mongo')
     else console.log('Not connected to mongo')
-})
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
 })
 
 app.listen(port, () => {
