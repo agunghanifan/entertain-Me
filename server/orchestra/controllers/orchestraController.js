@@ -1,38 +1,76 @@
 const axios = require('axios')
+const Redis = require('ioredis')
+const redis = new Redis()
 const movies = 'http://localhost:4001'
 const tvSeries = 'http://localhost:4002'
 
 class OrchestraController {
-  static showAll(req, res, next) {
-    Promise.all([
-      axios.get(movies + '/movies'),
-      axios.get(tvSeries + '/tvseries')
-    ])
-      .then(values => values.map(value => {
-        return value.data
-      }))
-      .then(data => {
-        res.status(200).json(data)
-      })
-      .catch(err => console.log(err))
+  static async showAll (req, res, next) {
+    try {
+      const allData = await redis.get('all:data')
+      if(!allData) {
+        await Promise.all([
+          axios.get(movies + '/movies'),
+          axios.get(tvSeries + '/tvseries')
+        ])
+          .then(values => values.map(value => {
+            return value.data
+          }))
+          .then(data => {
+            redis.set('all:data', JSON.stringify(data))
+            res.status(200).json(data)
+          })
+          .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+          })
+      } else {
+        res.status(200).json(JSON.parse(allData))
+      }
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(err)
+    }
   }
 
-  static showAllMovie(req, res, next) {
-    axios.get(movies + '/movies')
-      .then(response => res.status(200).json(response.data))
-      .catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-      })
+  static async showAllMovie(req, res, next) {
+    try {
+      const allMovie = await redis.get('all:movie')
+      if(!allMovie) {
+        await axios.get(movies + '/movies')
+          .then(response => {
+            redis.set('all:movie', JSON.stringify(response.data))
+            res.status(200).json(response.data)
+          }) 
+          .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+          })
+      } else res.status(200).json(JSON.parse(allMovie))
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(err)
+    }
   }
 
-  static showAllTvSeries(req, res, next) {
-    axios.get(tvSeries + '/tvseries')
-      .then(response => res.status(200).json(response.data))
-      .catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-      })
+  static async showAllTvSeries(req, res, next) {
+    try {
+      const allTvSeries = await redis.get('all:tvSeries')
+      if (!allTvSeries) {
+        await axios.get(tvSeries + '/tvseries')
+          .then(response => {
+            redis.set('all:tvSeries', JSON.stringify(response.data)) 
+            res.status(200).json(response.data)
+          })
+          .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+          })
+      } else res.status(200).json(JSON.parse(allTvSeries))
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(err)
+    }
   }
 
   static addMovie(req, res, next) {
