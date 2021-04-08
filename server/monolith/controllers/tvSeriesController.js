@@ -1,9 +1,8 @@
-const Movies = require("../models/movies")
+const TvSeries = require("../models/tvSeries")
 
-class MoviesController {
-
-  static showAll(req, res, next) {
-    Movies.findAllMovie()
+class TvSeriesController {
+  static showAll (req, res, next) {
+    TvSeries.findAllSeries()
       .then((response) => res.status(200).json(response))
       .catch((err) => {
         console.log(err)
@@ -12,7 +11,7 @@ class MoviesController {
   }
 
   static addData(req, res, next) {
-    Movies.addOneMovie(req.body)
+    TvSeries.addOneSeries(req.body)
       .then(response => res.status(201).json(response.data))
       .catch(err => {
         console.log(err)
@@ -20,9 +19,9 @@ class MoviesController {
       })
   }
 
-  static showEditData(req, res, next) {
+  static showEditData (req, res, next) {
     const { id } = req.params
-    Movies.findOneMovie(id)
+    TvSeries.findOneSeries(id)
       .then(response => {
         if (!response) throw Error('id not found')
         else res.status(200).json(response)
@@ -36,10 +35,10 @@ class MoviesController {
       })
   }
 
-  static submitEditData(req, res, next) {
+  static submitEditData (req, res, next) {
     const { id } = req.params
     const { title, overview, poster_path, popularity, tags } = req.body 
-    Movies.updateOneMovie(id, {
+    TvSeries.updateOneSeries(id, {
       title,
       overview,
       poster_path,
@@ -61,7 +60,7 @@ class MoviesController {
   }
 
   static deleteData(req, res, next) {
-    Movies.deleteOneMovie(req.params.id)
+    TvSeries.deleteOneSeries(req.params.id)
       .then(response => {
         if(response.deletedCount === 0) throw Error('id not found')
         else res.status(200).json(response)
@@ -75,4 +74,4 @@ class MoviesController {
   }
 }
 
-module.exports = MoviesController
+module.exports = TvSeriesController
