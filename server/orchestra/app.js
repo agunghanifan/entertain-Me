@@ -1,49 +1,133 @@
 const express = require('express')
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, gql } = require('apollo-server')
+const axios = require('axios')
 const app = express()
 const routes = require('./routes')
-const port = 4000
+const port = 3999
 const { connectMongodb } = require('./config/mongodb')
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers });
+const movies = 'http://localhost:4001'
+const tvSeries = 'http://localhost:4002'
 
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
-
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
 const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Movies {
+  type Movie {
+    _id: ID
     title: String
     overview: String
     poster_path: String
-    popularity: Double
+    popularity: Float
     tags: [String]
   }
 
-  type TvSeries {
+  type TvSerie {
+    _id: ID
     title: String
     overview: String
     poster_path: String
-    popularity: Double
+    popularity: Float
     tags: [String]
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  input MovieInput {
+    title: String
+    overview: String
+    poster_path: String
+    popularity: Float
+    tags: [String]
+  }
+
+  input TvSerieInput {
+    title: String
+    overview: String
+    poster_path: String
+    popularity: Float
+    tags: [String]
+  }
+
   type Query {
-    books: [Book]
+    Movies: [Movie]
+    TvSeries: [TvSerie]
+  }
+
+  type Mutation {
+    addMovie(newMovie: MovieInput): Movie
+    addTvSerie(newTvSerie: TvSerieInput): TvSerie
   }
 `;
 
+const resolvers = {
+  Query: {
+    Movies: () => {
+      return axios.get(movies + '/movies')
+        .then((res) => {
+          return res.data
+        })
+        .catch((err) => {
+          throw err
+        })
+    },
+    TvSeries: () => {
+      return axios.get(tvSeries + '/tvseries')
+        .then((res) => {
+          return res.data
+        })
+        .catch((err) => {
+          throw err
+        })
+    }
+  },
+
+  Mutation: {
+    addMovie: (_, args) => {
+      const newMovie = {
+        title: args.newMovie.title,
+        overview: args.newMovie.overview,
+        poster_path: args.newMovie.poster_path,
+        popularity: args.newMovie.popularity,
+        tags: args.newMovie.tags
+      }
+      return axios({
+        url: movies + '/addmovie',
+        method: 'POST',
+        data: newMovie
+      })
+        .then((res) => {
+          return res.status
+        })
+        .catch((err) => {
+          throw err
+        })
+    },
+    addTvSerie: (_, args) => {
+      const newTvSerie = {
+        title: args.newTvSerie.title,
+        overview: args.newTvSerie.overview,
+        poster_path: args.newTvSerie.poster_path,
+        popularity: args.newTvSerie.popularity,
+        tags: args.newTvSerie.tags
+      }
+      return axios({
+        url: tvSeries + '/addtvseries',
+        method: 'POST',
+        data: newTvSerie
+      })
+        .then((res) => {
+          console.log(res)
+          return res.status
+        })
+        .catch((err) => {
+          console.log(err)
+          throw err
+        })
+    },
+  }
+}
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`)
+})
 
 
 app.use(express.urlencoded({ extended: true}))
