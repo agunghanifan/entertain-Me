@@ -11,10 +11,10 @@ const typeDefs = gql`
   }
 
   input TvSerieInput {
-    title: String
-    overview: String
-    poster_path: String
-    popularity: Float
+    title: String!
+    overview: String!
+    poster_path: String!
+    popularity: Float!
     tags: [String]
   }
 

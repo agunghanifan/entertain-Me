@@ -14,9 +14,6 @@ const resolvers = {
               redis.set('all:movie', JSON.stringify(res.data))
               return res.data
             })
-            .catch((err) => {
-              throw err
-            })
         } else return JSON.parse(allMovie)
       } catch(err) {
         console.log(err)
@@ -33,10 +30,6 @@ const resolvers = {
             .then((res) => {
               redis.set('each:specifiedMovie', JSON.stringify(res.data))
               return res.data
-            })
-            .catch((err) => {
-              console.log(err)
-              throw new Error ('Movie not Found')
             })
         } else return specifiedMovie
       } catch (err) {
