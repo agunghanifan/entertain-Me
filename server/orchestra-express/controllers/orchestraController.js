@@ -20,10 +20,6 @@ class OrchestraController {
             redis.set('all:data', JSON.stringify(data))
             res.status(200).json(data)
           })
-          .catch(err => {
-            console.log(err)
-            res.status(500).json(err)
-          })
       } else {
         res.status(200).json(JSON.parse(allData))
       }
@@ -41,10 +37,6 @@ class OrchestraController {
           .then(response => {
             redis.set('all:movie', JSON.stringify(response.data))
             res.status(200).json(response.data)
-          }) 
-          .catch(err => {
-            console.log(err)
-            res.status(500).json(err)
           })
       } else res.status(200).json(JSON.parse(allMovie))
     } catch(err) {
@@ -61,10 +53,6 @@ class OrchestraController {
           .then(response => {
             redis.set('all:tvSeries', JSON.stringify(response.data)) 
             res.status(200).json(response.data)
-          })
-          .catch(err => {
-            console.log(err)
-            res.status(500).json(err)
           })
       } else res.status(200).json(JSON.parse(allTvSeries))
     } catch(err) {
@@ -85,7 +73,7 @@ class OrchestraController {
         tags: req.body.tags
       }
     })
-      .then(response => res.status(201).json(response.statusText))
+      .then(response => res.status(201).json(response.ops))
       .catch(err => {
         console.log(err)
         res.status(500).json({ message: "Internal Server Error"})
@@ -111,34 +99,53 @@ class OrchestraController {
       })
   }
 
-  static showEditMovie(req, res, next) {
-    axios.get(movies + `/movie/${req.params.id}`)
-    .then(response => {
-      if(!response.data) throw Error('id not found')
-      else res.status(200).json(response.data)
-    })
-    .catch(err => {
+  static async showEditMovie(req, res, next) {
+    try {
+      let specifiedMovie = await redis.get('each:movie')
+      specifiedMovie = JSON.parse(specifiedMovie)
+
+      if (specifiedMovie._id != req.params.id) {
+        await axios.get(movies + `/movie/${req.params.id}`)
+        .then(response => {
+          if(!response.data) throw Error('id not found')
+          else {
+            redis.set('each:movie', response.data)
+            res.status(200).json(response.data)
+          } 
+        })
+        
+      } else res.status(200).json(specifiedMovie)
+
+    } catch (err) {
       if (err.message == 'id not found') res.status(404).json({ message: 'Movie not Found'})
       else {
         console.log(err)
         res.status(500).json({ message: "Internal Server Error"})
       }
-    })
+    }
   }
 
-  static showEditTvSeries(req, res, next) {
-    axios.get(tvSeries + `/tvseries/${req.params.id}`)
-      .then(response => {
-        if(!response.data) throw Error('id not found')
-        else res.status(200).json(response.data)
-      })
-      .catch(err => {
-        if (err.message == 'id not found') res.status(404).json({ message: 'Movie not Found'})
-        else {
-          console.log(err)
-          res.status(500).json({ message: "Internal Server Error"})
-        }
-      })
+  static async showEditTvSeries(req, res, next) {
+    try {
+      let specifiedTvSerie = await redis.get('each:tvserie')
+      specifiedTvSerie = JSON.parse(specifiedTvSerie)
+  
+      if (specifiedTvSerie._id != req.params.id) {
+        await axios.get(tvSeries + `/tvseries/${req.params.id}`)
+          .then(response => {
+            if(!response.data) throw Error('id not found')
+            else res.status(200).json(response.data)
+          })
+
+      } else res.status(200).json(specifiedTvSerie)
+    
+    } catch (err) {
+      if (err.message == 'id not found') res.status(404).json({ message: 'Movie not Found'})
+      else {
+        console.log(err)
+        res.status(500).json({ message: "Internal Server Error"})
+      }
+    }
   }
 
   static submitEditMovie(req, res, next) {

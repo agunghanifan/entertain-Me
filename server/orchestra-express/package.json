@@ -1,5 +1,5 @@
 {
-  "name": "orchestra",
+  "name": "orchestra-express",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,12 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.22.2",
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "graphql": "^15.5.0",
     "ioredis": "^4.26.0",
-    "lodash": "^4.17.21",
     "mongodb": "^3.6.6",
     "redis": "^3.1.0"
   }

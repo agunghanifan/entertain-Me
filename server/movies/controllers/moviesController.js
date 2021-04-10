@@ -13,7 +13,10 @@ class MoviesController {
 
   static addData(req, res, next) {
     Movies.addOneMovie(req.body)
-      .then(response => res.status(201).json(response.data))
+      .then(response => {
+        console.log(response)
+        res.status(201).json(response.ops)
+      })
       .catch(err => {
         console.log(err)
         res.status(500).json({ message: "Internal Server Error"})
@@ -48,7 +51,7 @@ class MoviesController {
     })
       .then(response => {
         if (response.n == 0) throw Error('id not found')
-        else res.status(200).json(response)
+        else res.status(200).json({ message: `Success edited details movie at id = ${id}`})
       })
       .catch(err => {
         if (err.message == 'id not found') {
@@ -64,11 +67,12 @@ class MoviesController {
     Movies.deleteOneMovie(req.params.id)
       .then(response => {
         if(response.deletedCount === 0) throw Error('id not found')
-        else res.status(200).json(response)
+        else res.status(200).json({ message: `Success deleted movie at id ${req.params.id}`})
       })
       .catch(err => {
         console.log(err)
         if (err.message == 'id not found') {
+          console.log('masuk err id not found')
           res.status(404).json({ message: "Movie not Found" })
         } else res.status(500).json({ message: "Internal Server Error"})
       })

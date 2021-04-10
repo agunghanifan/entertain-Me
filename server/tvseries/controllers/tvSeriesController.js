@@ -12,7 +12,7 @@ class TvSeriesController {
 
   static addData(req, res, next) {
     TvSeries.addOneSeries(req.body)
-      .then(response => res.status(201).json(response.data))
+      .then(response => res.status(201).json(response.ops))
       .catch(err => {
         console.log(err)
         res.status(500).json({ message: "Internal Server Error"})
@@ -46,8 +46,9 @@ class TvSeriesController {
       tags
     })
       .then(response => {
+        console.log(response)
         if (response.n == 0) throw Error('id not found')
-        else res.status(200).json(response)
+        else res.status(200).json({ message: `Success edited details tvserie id = ${id}`})
       })
       .catch(err => {
         if (err.message == 'id not found') {
@@ -63,7 +64,7 @@ class TvSeriesController {
     TvSeries.deleteOneSeries(req.params.id)
       .then(response => {
         if(response.deletedCount === 0) throw Error('id not found')
-        else res.status(200).json(response)
+        else res.status(200).json({ message: `Success deleted tvserie at id ${req.params.id}`})
       })
       .catch(err => {
         console.log(err)
