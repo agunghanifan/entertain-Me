@@ -3,26 +3,27 @@ import Navbar from '../components/Navbar'
 import { useQuery, gql } from '@apollo/client'
 import CardMovie from '../components/CardMovie'
 
+export const FETCH_ALL = gql`
+  query fetchall {
+  Movies{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+  TvSeries{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+}`
+
 export default function Home() {
-  const FETCH_ALL = gql`
-    query fetchall {
-    Movies{
-      _id
-      title
-      overview
-      poster_path
-      popularity
-      tags
-    }
-    TvSeries{
-      _id
-      title
-      overview
-      poster_path
-      popularity
-      tags
-    }
-  }`
 
   const { data, loading, error} = useQuery(FETCH_ALL)
 
