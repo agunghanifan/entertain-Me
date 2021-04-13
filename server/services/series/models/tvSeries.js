@@ -4,23 +4,23 @@ const { getDatabase } = require('../config/mongodb')
 
 class TvSeries {
   static findAllSeries () {
-    return getDatabase().collection('TV Series').find().toArray()
+    return getDatabase().collection('TvSeries').find().toArray()
   }
 
   static findOneSeries (longId) {
-    return getDatabase().collection('TV Series').findOne({ _id: ObjectId(longId) })
+    return getDatabase().collection('TvSeries').findOne({ _id: ObjectId(longId) })
   }
 
   static addOneSeries (data) {
-    return getDatabase().collection('TV Series').insertOne(data)
+    return getDatabase().collection('TvSeries').insertOne(data)
   }
 
   static updateOneSeries (longId, data) {
-    return getDatabase().collection('TV Series').updateOne({ _id: ObjectId(longId) }, { $set: data })
+    return getDatabase().collection('TvSeries').updateOne({ _id: ObjectId(longId) }, { $set: data })
   }
 
   static deleteOneSeries (longId) {
-    return getDatabase().collection('TV Series').deleteOne({ _id: ObjectId(longId)})
+    return getDatabase().collection('TvSeries').deleteOne({ _id: ObjectId(longId)})
   }
 }
 

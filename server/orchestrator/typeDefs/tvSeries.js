@@ -15,7 +15,7 @@ const typeDefs = gql`
     overview: String!
     poster_path: String!
     popularity: Float!
-    tags: [String]
+    tags: [String]!
   }
 
   extend type Query {
