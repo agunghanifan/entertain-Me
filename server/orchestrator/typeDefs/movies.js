@@ -18,6 +18,10 @@ const typeDefs = gql`
     tags: [String]!
   }
 
+  type Message {
+    message: String
+  }
+
   extend type Query {
     Movies: [Movie]
     Movie(_id: ID): Movie
@@ -25,7 +29,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     addMovie(newMovie: MovieInput): Movie
-    editMovie(_id: ID, editExistingMovie: MovieInput): Movie
+    editMovie(_id: ID, editExistingMovie: MovieInput): Message
     deleteMovie(_id: ID): Movie
   }
 `

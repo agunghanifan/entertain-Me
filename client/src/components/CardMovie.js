@@ -23,7 +23,7 @@ export default function CardMovie(props) {
 
   const { movie, params } = props
   const history = useHistory()
-  const [ deleteMovie, { data, loading, error }] = useMutation(DELETE_MOVIE, {
+  const [ deleteMovie, { loading, error }] = useMutation(DELETE_MOVIE, {
     refetchQueries: [
       { query: FETCH_ALL }
     ]
@@ -142,7 +142,7 @@ export default function CardMovie(props) {
 
   return (
     <>
-      <Card style={{ width: "25rem" }} className="mx-3">
+      <Card style={{ width: "21rem" }} className="mx-3 my-2">
         <Card.Img variant="top" src={movie.poster_path} />
         <Card.Body>
           <Card.Title>{movie.title}</Card.Title>
@@ -151,12 +151,12 @@ export default function CardMovie(props) {
           </Card.Text>
           <Row className="">
             <Col>
-              <Button variant="primary" className="mb-2" onClick={(e) => goToDetails(e, { id: movie._id, params })}>Go Details 💭</Button>
-              <Button variant="danger" onClick={(e) => goToDelete(e, { id: movie._id, params })}>Delete 🤯</Button>
+              <Button variant="primary" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToDetails(e, { id: movie._id, params })}>Go Details 💭</Button>
+              <Button variant="danger" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToDelete(e, { id: movie._id, params })}>Delete 🤯</Button>
             </Col>
             <Col>
-              <Button variant="warning" className="mb-2" onClick={(e) => goToFavorites(e, { id: movie._id, params })}>Add to Favorite 💗</Button>
-              <Button variant="warning" onClick={(e) => goToEdit(e, { id: movie._id, params })}>Edit data 🧑‍💻</Button>
+              <Button variant="success" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToFavorites(e, { id: movie._id, params })}>Add Favorite 💗</Button>
+              <Button variant="warning" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToEdit(e, { id: movie._id, params })}>Edit data 🧑‍💻</Button>
             </Col>
           </Row>
         </Card.Body>

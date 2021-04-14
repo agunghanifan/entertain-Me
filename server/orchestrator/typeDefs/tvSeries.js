@@ -18,6 +18,10 @@ const typeDefs = gql`
     tags: [String]!
   }
 
+  type MessageSeries {
+    message: String
+  }
+
   extend type Query {
     TvSeries: [TvSerie]
     TvSerie(_id: ID): TvSerie
@@ -25,7 +29,7 @@ const typeDefs = gql`
 
   extend type Mutation {
     addTvSerie(newTvSerie: TvSerieInput): TvSerie
-    editTvSeries(_id: ID, editExistingTvSeries: TvSerieInput): TvSerie
+    editTvSeries(_id: ID, editExistingTvSeries: TvSerieInput): MessageSeries
     deleteTvSeries(_id: ID): TvSerie
   }
 `

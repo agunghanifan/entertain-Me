@@ -1,32 +1,76 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { Form, Button } from 'react-bootstrap'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { useParams, useHistory } from 'react-router-dom'
-import { editVar } from '../graphql/vars'
-import { useReactiveVar } from '@apollo/client'
+// import { editVar } from '../graphql/vars'
+// import { useReactiveVar, useQuery } from '@apollo/client'
 import { FETCH_ALL } from '../pages/Home'
 
 const EDIT_MOVIE = gql`
   mutation editmovie ($idMovie: ID, $inputEdit: MovieInput) {
   editMovie(_id: $idMovie, editExistingMovie: $inputEdit){
+    message
+  }
+}
+`
+
+const SHOW_ONE_MOVIE = gql`
+  query showmoviebyid ($idMovie: ID){
+    Movie(_id: $idMovie){
+      _id
+      title
+      overview
+      poster_path
+      popularity
+      tags
+    }
+  }
+`
+
+const SHOW_ONE_SERIES = gql`
+  query showtvserie ($idMovie: ID){
+  TvSerie(_id: $idMovie){
     _id
     title
+    overview
+    poster_path
+    popularity
+    tags
   }
 }
 `
 
 export default function EditMovies() {
-  const { id } = useParams()
+  const { id, params } = useParams()
   const history = useHistory()
-  const editDataDisplay = useReactiveVar(editVar)
+  // const editDataDisplay = useReactiveVar(editVar)
+
+  const { data, loading, error } = useQuery(SHOW_ONE_MOVIE, {
+    variables: {
+      idMovie: id
+    }
+  })
+
+  useEffect(() => {
+      if (data) {
+        console.log(data)
+        setMovieInput({
+          title: data[params].title,
+          overview: data[params].overview,
+          poster_path: data[params].poster_path,
+          popularity: data[params].popularity,
+          tags: data[params].tags
+        })
+      }
+  }, [data])
 
   const [movieInput, setMovieInput] = useState({
-    title: editDataDisplay.title,
-    overview: editDataDisplay.overview,
-    poster_path: editDataDisplay.poster_path,
-    popularity: editDataDisplay.popularity,
-    tags: editDataDisplay.tags
+    title: '',
+    overview: '',
+    poster_path: '',
+    popularity: '',
+    tags: ''
   })
 
   function onChange (e) {
@@ -37,7 +81,7 @@ export default function EditMovies() {
     setMovieInput(newInput)
   }
 
-  const [ editMovie, { data, loading, error }] =  useMutation(EDIT_MOVIE, {
+  const [ editMovie ] =  useMutation(EDIT_MOVIE, {
     refetchQueries: [
       { query: FETCH_ALL }
     ]
@@ -55,6 +99,14 @@ export default function EditMovies() {
     history.push('/')
   }
 
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
+
+  if (error) {
+    return <h1>Error here {JSON.stringify(error)}</h1>
+  }
+
   return (
     <div>
       <div>
@@ -62,6 +114,7 @@ export default function EditMovies() {
       </div>
       <div className="container">
         <h1>Hello edit Movies</h1>
+        {JSON.stringify(data)}
         <div className="container">
         <Form onSubmit={(e) => submitButton(e)}>
           <Form.Group controlId="">

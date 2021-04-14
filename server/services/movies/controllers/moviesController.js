@@ -27,6 +27,7 @@ class MoviesController {
     const { id } = req.params
     Movies.findOneMovie(id)
       .then(response => {
+        console.log(response)
         if (!response) throw Error('id not found')
         else res.status(200).json(response)
       })

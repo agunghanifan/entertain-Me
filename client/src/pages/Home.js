@@ -33,8 +33,7 @@ export default function Home() {
         <Navbar />
       </div>
       <div className="container">
-        <h1>Home</h1>  
-      </div>
+        <h1 className="mt-5 mb-5">EntertainMe</h1>  
       <div className="">
         <h1>Movies</h1>
         <div className="mt-3 mb-5 mx-5 row d-flex justify-content-center" style={{ width: "100%" }}>
@@ -56,6 +55,7 @@ export default function Home() {
             })
           }
         </div>
+      </div>
       </div>
     </div>
   )

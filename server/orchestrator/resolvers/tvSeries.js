@@ -22,7 +22,7 @@ const resolvers = {
       const { _id } = args
       let specifiedTvSerie = await redis.get('each:tvserie')
       specifiedTvSerie = JSON.parse(specifiedTvSerie)
-      if (!specifiedTvSerie._id != _id) {
+      if (!specifiedTvSerie || !specifiedTvSerie._id != _id) {
         return await axios.get(tvSeries + '/tvseries/' + _id)
           .then((res) => {
             redis.set('each:tvserie', JSON.stringify(res.data))

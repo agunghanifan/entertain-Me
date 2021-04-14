@@ -9,6 +9,7 @@ import Details from './pages/Details'
 import EditMovies from './pages/EditMovie'
 import Favorites from './pages/Favorites'
 import AddMovie from './pages/AddMovie'
+import NoMatch from './pages/NoMatch'
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
             </Route>
             <Route path="/addmovie">
               <AddMovie />
+            </Route>
+            <Route path="*">
+              <NoMatch />
             </Route>
           </Switch>
         </Router>

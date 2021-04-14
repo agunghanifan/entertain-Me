@@ -23,11 +23,14 @@ const resolvers = {
     Movie: async (_, args) => {
       try {
         const { _id } = args
+        console.log(_id, 'ini dari movie')
         let specifiedMovie = await redis.get('each:specifiedMovie')
         specifiedMovie = JSON.parse(specifiedMovie)
-        if (specifiedMovie._id != _id) {
+        if (!specifiedMovie || specifiedMovie._id != _id) {
+          console.log("masuk if")
           return await axios.get(movies + '/movie/' + _id)
             .then((res) => {
+              console.log(res , "ini dari movie")
               redis.set('each:specifiedMovie', JSON.stringify(res.data))
               return res.data
             })
@@ -55,6 +58,7 @@ const resolvers = {
         .then((res) => {
           console.log(res)
           redis.del('all:movie')
+          redis.del('each:specifiedMovie')
           return res.data[0]
         })
         .catch((err) => {
@@ -78,7 +82,8 @@ const resolvers = {
         .then((res) => {
           console.log(res)
           redis.del('all:movie')
-          return res
+          redis.del('each:specifiedMovie')
+          return res.data.message
         })
         .catch((err) => {
           throw err
@@ -93,6 +98,7 @@ const resolvers = {
         .then(res => {
           console.log(res)
           redis.del('all:movie')
+          redis.del('each:specifiedMovie')
           return res
         })
         .catch((err) => {
