@@ -155,8 +155,11 @@ export default function CardMovie(props) {
               <Button variant="danger" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToDelete(e, { id: movie._id, params })}>Delete 🤯</Button>
             </Col>
             <Col>
+              {
+                params !== "Movie" ? null :
+                <Button variant="warning" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToEdit(e, { id: movie._id, params })}>Edit data 🧑‍💻</Button>
+              }
               <Button variant="success" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToFavorites(e, { id: movie._id, params })}>Add Favorite 💗</Button>
-              <Button variant="warning" style={{ width: "140px"}} className="mb-2 mt-2" onClick={(e) => goToEdit(e, { id: movie._id, params })}>Edit data 🧑‍💻</Button>
             </Col>
           </Row>
         </Card.Body>
