@@ -44,9 +44,9 @@ const SHOW_ONE_SERIES = gql`
 export default function EditMovies() {
   const { id, params } = useParams()
   const history = useHistory()
-  // const editDataDisplay = useReactiveVar(editVar)
+  
 
-  const { data, loading, error } = useQuery(SHOW_ONE_MOVIE, {
+  const { data, loading, error } = useQuery( params === 'Movie' ? SHOW_ONE_MOVIE : SHOW_ONE_SERIES, {
     variables: {
       idMovie: id
     }
