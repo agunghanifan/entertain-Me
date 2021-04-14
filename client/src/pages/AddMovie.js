@@ -42,15 +42,15 @@ export default function FormMovies() {
     setMovieInput(newInput)
   }
 
-  async function submitButton (e) {
+  function submitButton (e) {
     e.preventDefault()
     console.log(movieInput)
-    await addMovie({
+    addMovie({
       variables: {
         newInputMovie: { ...movieInput, popularity: Number(movieInput.popularity)} 
       }
     })
-    await history.push('/')
+    history.push('/')
   }
 
   if (loading) {

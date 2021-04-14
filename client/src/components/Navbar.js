@@ -12,6 +12,7 @@ export default function NavbarComp() {
           <Nav className="mr-auto">
             <Nav.Link><Link to="/" style={{ textDecoration: 'none', color: 'black' }}>Home</Link></Nav.Link>
             <Nav.Link><Link to="/addmovie" style={{ textDecoration: 'none', color: 'black' }}>Add Movie</Link></Nav.Link>
+            <Nav.Link><Link to="/favorites" style={{ textDecoration: 'none', color: 'black' }}>Favorites</Link></Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

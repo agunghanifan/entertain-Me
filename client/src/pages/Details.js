@@ -48,30 +48,31 @@ export default function Details() {
         <Navbar />
       </div>
       <div className="container">
-        <h1>Hello Details</h1>
-        {
-          loading ? <h1>Loading...</h1> :
-          error ? <h1>We found some errors...</h1> :
-          <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={data[params].poster_path} />
-            <Card.Body>
-              <Card.Title>{data[params].title}</Card.Title>
-              <Card.Text>
-                {data[params].overview}
-              </Card.Text>
-              <Card.Text>
-                {data[params].popularity}
-              </Card.Text>
-              <ListGroup>
-                {
-                  data[params].tags.map((tag) => {
-                    return <ListGroup.Item key={tag}>{tag}</ListGroup.Item>
-                  })
-                }
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        }
+        <div className="mt-5 justify-content-center align-items-center">
+          {
+            loading ? <h1>Loading...</h1> :
+            error ? <h1>We found some errors...</h1> :
+            <Card style={{ width: '18rem' }}>
+              <Card.Img variant="top" src={data[params].poster_path} />
+              <Card.Body>
+                <Card.Title>{data[params].title}</Card.Title>
+                <Card.Text>
+                  {data[params].overview}
+                </Card.Text>
+                <Card.Text>
+                  Rating : {data[params].popularity} ⭐️
+                </Card.Text>
+                <ListGroup>
+                  {
+                    data[params].tags.map((tag) => {
+                      return <ListGroup.Item key={tag}>{tag}</ListGroup.Item>
+                    })
+                  }
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          }
+        </div>
       </div>
     </div>
   )

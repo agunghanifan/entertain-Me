@@ -35,23 +35,27 @@ export default function Home() {
       <div className="container">
         <h1>Home</h1>  
       </div>
-      <div>
+      <div className="">
         <h1>Movies</h1>
-        {
-          loading ? <h1>Loading...</h1> :
-          error ? <h1>We found Error</h1> :
-          data.Movies.map((movie) => {
-            return <CardMovie movie={movie} params={"Movie"} key={movie._id} />
-          })
-        }
+        <div className="mt-3 mb-5 mx-5 row d-flex justify-content-center" style={{ width: "100%" }}>
+          {
+            loading ? <h1>Loading...</h1> :
+            error ? <h1>We found Error</h1> :
+            data.Movies.map((movie) => {
+              return <CardMovie movie={movie} params={"Movie"} key={movie._id} />
+            })
+          }
+        </div>
         <h1>TV Series</h1>
-        {
-          loading ? <h1>Loading...</h1> :
-          error ? <h1>We found Error</h1> :
-          data.TvSeries.map((movie) => {
-            return <CardMovie movie={movie} params={"TvSerie"} key={movie._id} />
-          })
-        }
+        <div className="mt-3 mb-5 row mx-5 d-flex justify-content-center" style={{ width: "100%" }}>
+          {
+            loading ? <h1>Loading...</h1> :
+            error ? <h1>We found Error</h1> :
+            data.TvSeries.map((movie) => {
+              return <CardMovie movie={movie} params={"TvSerie"} key={movie._id} />
+            })
+          }
+        </div>
       </div>
     </div>
   )
